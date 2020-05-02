@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import * as yup from "yup";
-import {  Form, FormText,Input } from 'reactstrap';
 
-//form schema
+
+
 const formSchema = yup.object().shape({
     name: yup.string().required("Name is a required field."),
     size: yup.string().required("Must Select a Size"),
@@ -15,8 +15,7 @@ const formSchema = yup.object().shape({
   });
 
 export default function Form1(){
-//______________STATES_________________
-    //state for form
+
     const [formState, setFormState] = useState({
         name: "",
         size: "",
@@ -26,7 +25,7 @@ export default function Form1(){
         sausage: false,
         specInstr: ""
     })
-    //state for errors
+   
     const [errors, setErrors] = useState({
         name: "",
         size: "",
@@ -36,12 +35,11 @@ export default function Form1(){
         sausage: "",
         specInstr: ""
     })
-    //state for button
+   
     const [buttonDisabled, setButtonDisabled] = useState(true);
-    //state for post
+   
     const [post, setPost] = useState([]);
-//_____________EVENT HANDLERS___________
-    //input change
+
     const inputChange = e => {
         e.persist();
         const newFormData = {
@@ -53,13 +51,13 @@ export default function Form1(){
         validateChange(e);
         setFormState(newFormData);
       };
-    //button disabled
+   
     useEffect(() => {
         formSchema.isValid(formState).then(valid => {
           setButtonDisabled(!valid);
         });
       }, [formState]);
-    //validate changes
+   
     const validateChange = e => {
         yup
           .reach(formSchema, e.target.name)
@@ -77,7 +75,7 @@ export default function Form1(){
             });
           });
       };
-    //on submit
+    
     const formSubmit = e => {
         e.preventDefault();
         axios
@@ -98,16 +96,17 @@ export default function Form1(){
           })
           .catch(err => console.log(err.response));
       };
-//_____________Return the Form____________________  
+
     return(
         
 
-        <Form onSubmit = {formSubmit}>
-            <FormText>Place an Order!</FormText>
+        <form onSubmit = {formSubmit}>
+            <h1>Place an Order!</h1>
+            <br/>
             <label htmlFor = 'name'>
                 What is your name?
                 <br/>
-                <Input
+                <input
                 type = 'text'
                 name = 'name'
                 id = 'nameinput'
@@ -132,7 +131,7 @@ export default function Form1(){
             
             <div className = 'toppingsChecklist'>
 
-                <FormText>Select Toppings</FormText>
+                <h2>Select Toppings</h2>
 
                 <label htmlFor = 'pepperoni'>
                     <input
@@ -183,6 +182,7 @@ export default function Form1(){
                 <br/>
 
             </div>
+            <br/>
 
             <label htmlFor = 'Special Instructions'>
                 Any special instructions?
@@ -199,7 +199,8 @@ export default function Form1(){
             <button name = 'submit' disabled={buttonDisabled}>Submit</button>
             <pre>{JSON.stringify(post, null, 2)}</pre>
             
-        </Form>
+        </form>
+        
 
     )
 
